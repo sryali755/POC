@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        inputs: [{ id: "Strategic Input", value: [strategicInput] }],
+        inputs: [{ id: "Startegic Input", value: [strategicInput] }],
       }),
     });
 
@@ -42,9 +42,9 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errMsg =
-        (typeof raw?.error === "object" && raw.error !== null && "message" in raw.error
+        typeof raw?.error === "object" && raw.error !== null && "message" in raw.error
           ? String((raw.error as Record<string, unknown>).message)
-          : String(raw?.error || raw?.detail || raw?.message || `Writer API failed with status ${response.status}`));
+          : String(raw?.error || raw?.detail || raw?.message || responseText || `Writer API failed with status ${response.status}`);
       throw new Error(errMsg);
     }
 

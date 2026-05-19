@@ -10,6 +10,15 @@ type AnalyzeResponse = {
   error?: string;
 };
 
+async function safeJson(res: Response): Promise<AnalyzeResponse> {
+  const text = await res.text();
+  try {
+    return JSON.parse(text) as AnalyzeResponse;
+  } catch {
+    return { error: text.trim() || `Server error (HTTP ${res.status})` };
+  }
+}
+
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isGeneratingAll, setIsGeneratingAll] = useState(false);
@@ -136,7 +145,7 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ strategicInput: val }),
         });
-        const payload = (await res.json()) as AnalyzeResponse;
+        const payload = await safeJson(res);
         if (!res.ok) throw new Error(payload.error || "Unable to analyze input.");
         setNudge(payload.creativeNudge || "No response returned.");
       } catch (err) {
@@ -202,7 +211,7 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ strategicInput: input.trim() }),
         });
-        const payload = (await res.json()) as AnalyzeResponse;
+        const payload = await safeJson(res);
         if (!res.ok) throw new Error(payload.error || "Unable to analyze input.");
         setNudge(payload.creativeNudge || "No response returned.");
       } catch (err) {
@@ -225,7 +234,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: rtbInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setRtbNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -245,7 +254,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: smpInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setSmpNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -265,7 +274,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: rbcaInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setRbcaNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -285,7 +294,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: badInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setBadNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -305,7 +314,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: sogInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setSogNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -325,7 +334,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: bpafInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setBpafNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -345,7 +354,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: soeInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setSoeNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -365,7 +374,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: tbicInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setTbicNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -385,7 +394,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: bvcsInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setBvcsNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -405,7 +414,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: tsInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setTsNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -425,7 +434,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: dnInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setDnNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
@@ -445,7 +454,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ strategicInput: honInput }),
       });
-      const payload = (await response.json()) as AnalyzeResponse;
+      const payload = await safeJson(response);
       if (!response.ok) throw new Error(payload.error || "Unable to analyze input.");
       setHonNudge(payload.creativeNudge || "No response returned.");
     } catch (err) {
