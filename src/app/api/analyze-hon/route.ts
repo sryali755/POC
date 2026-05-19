@@ -25,13 +25,18 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        inputs: [
-          { id: "Startegic Input", value: [strategicInput] },
-        ],
+        inputs: [{ id: "Strategic Input", value: [strategicInput] }],
       }),
     });
 
-    const raw = await response.json() as Record<string, unknown>;
+    const responseText = await response.text();
+    let raw: Record<string, unknown>;
+
+    try {
+      raw = JSON.parse(responseText) as Record<string, unknown>;
+    } catch {
+      raw = { message: responseText || `Writer API returned status ${response.status}` };
+    }
 
     console.log("[ANALYZE-HON] Raw response:", JSON.stringify(raw, null, 2));
 
